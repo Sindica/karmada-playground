@@ -37,6 +37,7 @@ import (
 	"k8s.io/client-go/tools/leaderelection"
 	"k8s.io/client-go/tools/leaderelection/resourcelock"
 	"k8s.io/client-go/tools/record"
+	"k8s.io/klog/v2"
 
 	"sigs.k8s.io/controller-runtime/pkg/cache"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -311,6 +312,7 @@ func (cm *controllerManager) GetWebhookServer() *webhook.Server {
 				TLSOpts: cm.tlsOpts,
 			}
 		}
+		klog.Infof("Webhook server host %s, port %d", cm.webhookServer.Host, cm.webhookServer.Port)
 		if err := cm.Add(cm.webhookServer); err != nil {
 			panic(fmt.Sprintf("unable to add webhook server to the controller manager: %s", err))
 		}

@@ -648,8 +648,11 @@ func (c *Controller) collectIDForClusterObjectIfNeeded(ctx context.Context) (err
 	clusters := clusterList.Items
 	var errs []error
 
+	klog.Infof("Existing cluster count %d", len(clusters))
 	for i := range clusters {
 		cluster := &clusters[i]
+		klog.Infof("Existing cluster %s, mode %s, spec id %s", cluster.Name, cluster.Spec.SyncMode, cluster.Spec.ID)
+
 		if cluster.Spec.ID != "" {
 			continue
 		}

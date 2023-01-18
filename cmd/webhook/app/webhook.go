@@ -113,6 +113,7 @@ func Run(ctx context.Context, opts *options.Options) error {
 
 	klog.Info("registering webhooks to the webhook server")
 	hookServer := hookManager.GetWebhookServer()
+	klog.Infof("hookServer = %p. --------------- YH", hookServer)
 	hookServer.Register("/mutate-propagationpolicy", &webhook.Admission{Handler: propagationpolicy.NewMutatingHandler(
 		opts.DefaultNotReadyTolerationSeconds, opts.DefaultUnreachableTolerationSeconds)})
 	hookServer.Register("/validate-propagationpolicy", &webhook.Admission{Handler: &propagationpolicy.ValidatingAdmission{}})
@@ -127,6 +128,7 @@ func Run(ctx context.Context, opts *options.Options) error {
 	hookServer.Register("/validate-resourceinterpreterwebhookconfiguration", &webhook.Admission{Handler: &configuration.ValidatingAdmission{}})
 	hookServer.Register("/validate-federatedresourcequota", &webhook.Admission{Handler: &federatedresourcequota.ValidatingAdmission{}})
 	hookServer.Register("/validate-resourceinterpretercustomization", &webhook.Admission{Handler: &resourceinterpretercustomization.ValidatingAdmission{Client: hookManager.GetClient()}})
+	klog.Info("hookServer registering done ------------------- YH")
 	hookServer.WebhookMux.Handle("/readyz/", http.StripPrefix("/readyz/", &healthz.Handler{}))
 
 	// blocks until the context is done.
